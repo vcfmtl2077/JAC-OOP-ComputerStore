@@ -7,17 +7,16 @@ import oop.assignment1.projectb.model.Computer;
 public class projectB {
 
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
 		System.out.println("Welcome to X computer store!");
-		System.out.println("Set the maximun computers of this store? Please input: ");
-		int maxComputers = (int) sc.nextDouble();
+		Scanner sc = new Scanner(System.in);
+		int maxComputers = checkInputIntType(sc);
 
 		Computer[] inventory = new Computer[maxComputers];
-
 		while (true) {
 			int retry = 0;
 			showMenu();
-			int choice = (int) sc.nextDouble();
+			int choice = checkInputIntType(sc);
+			
 			checkMenuChoice(choice, sc);
 			checkQuit(choice);
 			switch (choice) {
@@ -61,7 +60,7 @@ public class projectB {
 		System.out.println("\t3.  Display all computers by a specific brand");
 		System.out.println("\t4.  Display all computers under a certain a price.");
 		System.out.println("\t5.  Quit");
-		System.out.println("Please enter your choice:");
+		System.out.println("Please select your choice.");
 	}
 
 	private static void checkQuit(int choice) {
@@ -117,12 +116,12 @@ public class projectB {
 			System.out.println("1. Add new computers.");
 			System.out.println("2. Return to Home");
 
-			int subMenuChoice = sc.nextInt();
+			int subMenuChoice = checkInputIntType(sc);
 
 			switch (subMenuChoice) {
 			case 1:
 				System.out.println("Please input the number of computers you want to add: ");
-				int num = (int) sc.nextDouble();
+				int num = checkInputIntType(sc);
 
 				if (num <= inStock) {
 					for (int i = 0; i < num; i++) {
@@ -163,13 +162,13 @@ public class projectB {
 			System.out.println("1. Update information of a computer.");
 			System.out.println("2. Return to Home");
 
-			int subMenuChoice = sc.nextInt();
+			int subMenuChoice = checkInputIntType(sc);;
 
 			switch (subMenuChoice) {
 			case 1:
 				System.out.println(
 						"Please input the index of computers you want to update (1-" + inventory.length + "): ");
-				int num = (int) sc.nextDouble();
+				int num = checkInputIntType(sc);;
 
 				Computer pc = inventory[num - 1];
 				if (pc == null) {
@@ -177,7 +176,7 @@ public class projectB {
 							+ " computer. Please enter your choice (1 or 2)");
 					System.out.println("1. Update information of a computer.");
 					System.out.println("2. Return to Home");
-					subMenuChoice = sc.nextInt();
+					subMenuChoice = checkInputIntType(sc);;
 				} else {
 					System.out.println("We found your computer. Here is the detail information:");
 					System.out.println("Computer  #" + num);
@@ -194,7 +193,7 @@ public class projectB {
 						System.out.println("\t4.  Price");
 						System.out.println("\t5.  Quit");
 						System.out.println("Please enter your choice:");
-						int updateChoice = sc.nextInt();
+						int updateChoice = checkInputIntType(sc);
 
 						switch (updateChoice) {
 						case 1:
@@ -241,24 +240,24 @@ public class projectB {
 			System.out.println("1. Find all computers by brand.");
 			System.out.println("2. Return to Home");
 
-			int subMenuChoice = sc.nextInt();
+			int subMenuChoice = checkInputIntType(sc);;
 
 			switch (subMenuChoice) {
 			case 1:
 				System.out.print("Please input your brand name: ");
 				String brand = sc.next();
-				
-				Computer[] result = findComputersByBrand(brand,inventory);
-				
-				if(actualSize(result)!=0) {
-					for(int i=0; i<actualSize(result);i++) {
+
+				Computer[] result = findComputersByBrand(brand, inventory);
+
+				if (actualSize(result) != 0) {
+					for (int i = 0; i < actualSize(result); i++) {
 						System.out.println("Find a match computer:");
-						System.out.println("\tComputer Brand: "+result[i].getBrand());
-						System.out.println("\tComputer Model: "+result[i].getModel());
-						System.out.println("\tComputer SN: "+result[i].getSN());
-						System.out.println("\tComputer Price: "+result[i].getPrice());
+						System.out.println("\tComputer Brand: " + result[i].getBrand());
+						System.out.println("\tComputer Model: " + result[i].getModel());
+						System.out.println("\tComputer SN: " + result[i].getSN());
+						System.out.println("\tComputer Price: " + result[i].getPrice());
 					}
-				}else {
+				} else {
 					System.out.println("No matched computer was found.");
 				}
 				break;
@@ -277,24 +276,24 @@ public class projectB {
 			System.out.println("1. Find all cheaper computers.");
 			System.out.println("2. Return to Home");
 
-			int subMenuChoice = sc.nextInt();
+			int subMenuChoice = checkInputIntType(sc);
 
 			switch (subMenuChoice) {
 			case 1:
 				System.out.print("Please input your target price: ");
-				int price = sc.nextInt();
-				
-				Computer[] result = findCheaperThan(price,inventory);
-				
-				if(actualSize(result)!=0) {
-					for(int i=0; i<actualSize(result);i++) {
-						System.out.println("Find a match computer lower than "+price);
-						System.out.println("\tComputer Brand: "+result[i].getBrand());
-						System.out.println("\tComputer Model: "+result[i].getModel());
-						System.out.println("\tComputer SN: "+result[i].getSN());
-						System.out.println("\tComputer Price: "+result[i].getPrice());
+				int price = checkInputIntType(sc);
+
+				Computer[] result = findCheaperThan(price, inventory);
+
+				if (actualSize(result) != 0) {
+					for (int i = 0; i < actualSize(result); i++) {
+						System.out.println("Find a match computer lower than " + price);
+						System.out.println("\tComputer Brand: " + result[i].getBrand());
+						System.out.println("\tComputer Model: " + result[i].getModel());
+						System.out.println("\tComputer SN: " + result[i].getSN());
+						System.out.println("\tComputer Price: " + result[i].getPrice());
 					}
-				}else {
+				} else {
 					System.out.println("No matched computer was found.");
 				}
 				break;
@@ -306,31 +305,48 @@ public class projectB {
 			}
 		}
 	}
-	
+
 	private static Computer[] findComputersByBrand(String brand, Computer[] inventory) {
 		Computer[] result = new Computer[actualSize(inventory)];
 		int index = 0;
-		
-		for(int i=0;i<inventory.length;i++) {
-			if(inventory[i]!=null&&inventory[i].getBrand().equals(brand)) {
+
+		for (int i = 0; i < inventory.length; i++) {
+			if (inventory[i] != null && inventory[i].getBrand().equals(brand)) {
 				result[index] = inventory[i];
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	private static Computer[] findCheaperThan(int price, Computer[] inventory) {
 		Computer[] result = new Computer[actualSize(inventory)];
 		int index = 0;
-		
-		for(int i=0;i<inventory.length;i++) {
-			if(inventory[i]!=null&&inventory[i].getPrice()<=price) {
+
+		for (int i = 0; i < inventory.length; i++) {
+			if (inventory[i] != null && inventory[i].getPrice() <= price) {
 				result[index] = inventory[i];
 			}
 		}
-		
+
 		return result;
+	}
+
+	private static int checkInputIntType( Scanner sc) {
+		int max = 0;
+		boolean valid = false;
+		while (!valid) {
+			System.out.println("Please input a positive integer: ");
+			try {
+				max = sc.nextInt();
+				valid = true;
+			} catch (Exception e) {
+				System.out.println("Invalid input value, please input a valid positive integer number!");
+				sc.next();
+
+			}
+		}
+		return max;
 	}
 
 }
